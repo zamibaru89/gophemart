@@ -292,7 +292,7 @@ func main() {
 		r.Post("/register", SignUp(ServerConfig, Server))
 		r.Post("/login", SignIn(ServerConfig, Server))
 		r.With(jwtauth.Verifier(tokenAuth)).Post("/welcome", Welcome)
-		r.With(jwtauth.Verifier(tokenAuth)).Post("/order", PostOrder(ServerConfig, Server))
+		r.With(jwtauth.Verifier(tokenAuth)).Post("/orders", PostOrder(ServerConfig, Server))
 		r.With(jwtauth.Verifier(tokenAuth)).Get("/orders", GetOrders(ServerConfig, Server))
 		r.With(jwtauth.Verifier(tokenAuth)).Get("/balance", GetBalance(ServerConfig, Server))
 		r.With(jwtauth.Verifier(tokenAuth)).Post("/balance/withdraw", PostWithdrawal(ServerConfig, Server))
