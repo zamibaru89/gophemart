@@ -260,11 +260,9 @@ func SignIn(config config.ServerConfig, st storage.Repo) func(w http.ResponseWri
 				return
 			}
 			w.Header().Set("Content-Type", "application/json")
-			w.Header().Add("jwt", tokenString)
-			w.Header().Add("Set-Cookie", "jwt="+tokenString)
 
 			http.SetCookie(w, &http.Cookie{
-				Name:    "jwt",
+				Name:    "auth",
 				Value:   tokenString,
 				Expires: expirationTime,
 			})
