@@ -260,6 +260,8 @@ func SignIn(config config.ServerConfig, st storage.Repo) func(w http.ResponseWri
 				return
 			}
 			w.Header().Set("Content-Type", "application/json")
+			w.Header().Set("Authorization", tokenString)
+
 			http.SetCookie(w, &http.Cookie{
 				Name:    "Authorization",
 				Value:   tokenString,
