@@ -1,4 +1,4 @@
-module github.com/zamibaru89/gophemart
+module github.com/zamibaru89/gophermart
 
 go 1.18
 
