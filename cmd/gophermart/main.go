@@ -270,7 +270,8 @@ func SignIn(config config.ServerConfig, st storage.Repo) func(w http.ResponseWri
 		} else {
 			w.WriteHeader(http.StatusUnauthorized)
 		}
-
+		log.Println(r.Body)
+		log.Println(r.Header)
 	}
 }
 
