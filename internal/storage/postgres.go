@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/jackc/pgx/v4"
 	"github.com/pkg/errors"
-	"github.com/zamibaru89/gophemart/internal/config"
+	"github.com/zamibaru89/gophermart/internal/config"
 	"log"
 )
 
