@@ -259,8 +259,9 @@ func SignIn(config config.ServerConfig, st storage.Repo) func(w http.ResponseWri
 				w.WriteHeader(http.StatusInternalServerError)
 				return
 			}
+			w.Header().Set("Content-Type", "application/json")
 			http.SetCookie(w, &http.Cookie{
-				Name:    "jwt",
+				Name:    "Authorization",
 				Value:   tokenString,
 				Expires: expirationTime,
 			})
