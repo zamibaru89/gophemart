@@ -262,7 +262,7 @@ func SignIn(config config.ServerConfig, st storage.Repo) func(w http.ResponseWri
 			w.Header().Set("Content-Type", "application/json")
 
 			http.SetCookie(w, &http.Cookie{
-				Name:    "auth",
+				Name:    "jwt",
 				Value:   tokenString,
 				Expires: expirationTime,
 			})

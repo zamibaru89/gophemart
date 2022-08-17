@@ -16,7 +16,7 @@ type Repo interface {
 
 type Credentials struct {
 	ID       int
-	Username string `json:"username"`
+	Username string `json:"login"`
 	Password string `json:"password"`
 }
 
