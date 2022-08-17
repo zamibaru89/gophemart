@@ -239,7 +239,7 @@ func SignIn(config config.ServerConfig, st storage.Repo) func(w http.ResponseWri
 		}
 		fmt.Println(user.ID)
 		if user.ID != 0 {
-			expirationTime := time.Now().Add(5 * time.Minute)
+			expirationTime := time.Now().Add(60 * time.Minute)
 			// Create the JWT claims, which includes the username and expiry time
 			claims := &Claims{
 				Username: user.Username,
