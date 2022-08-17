@@ -7,7 +7,7 @@ import (
 
 type ServerConfig struct {
 	Address string `env:"ADDRESS"`
-	DSN     string `env:"DATABASE_DSN"`
+	DSN     string `env:"DATABASE_URI"`
 }
 
 func LoadServerConfig() (conf ServerConfig, err error) {
