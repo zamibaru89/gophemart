@@ -10,8 +10,10 @@ import (
 	"github.com/zamibaru89/gophermart/internal/config"
 	"github.com/zamibaru89/gophermart/internal/functions"
 	"github.com/zamibaru89/gophermart/internal/storage"
+	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -75,16 +77,13 @@ func PostOrder(config config.ServerConfig, st storage.Repo) func(w http.Response
 	return func(w http.ResponseWriter, r *http.Request) {
 		_, claims, _ := jwtauth.FromContext(r.Context())
 		var order storage.Order
-		err := json.NewDecoder(r.Body).Decode(&order)
+		body, err := ioutil.ReadAll(r.Body)
 		if err != nil {
-			w.Header().Set("Content-Type", "application/json")
+
 			w.WriteHeader(http.StatusBadRequest)
-			//render.JSON(w, r, user)
-			fmt.Println(err)
-			return
-
 		}
-
+		orderId, err := strconv.Atoi(string(body))
+		order.OrderID = int64(orderId)
 		ID := claims["ID"]
 
 		order.UserID = int(ID.(float64))
