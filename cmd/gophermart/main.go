@@ -268,11 +268,11 @@ func SignIn(config config.ServerConfig, st storage.Repo) func(w http.ResponseWri
 				Value:   tokenString,
 				Expires: expirationTime,
 			})
+			w.WriteHeader(http.StatusOK)
 		} else {
 			w.WriteHeader(http.StatusUnauthorized)
 		}
-		log.Println(r.Body)
-		log.Println(r.Header)
+
 	}
 }
 
