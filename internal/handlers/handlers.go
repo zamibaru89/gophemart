@@ -51,7 +51,7 @@ func SignUp(config config.ServerConfig, st storage.Repo) func(w http.ResponseWri
 
 		token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-		tokenString, err := token.SignedString(config.SecretKey)
+		tokenString, err := token.SignedString([]byte(config.SecretKey))
 		if err != nil {
 			// If there is an error in creating the JWT return an internal server error
 			w.WriteHeader(http.StatusInternalServerError)
@@ -267,7 +267,7 @@ func SignIn(config config.ServerConfig, st storage.Repo) func(w http.ResponseWri
 			// Declare the token with the algorithm used for signing, and the claims
 			token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 			// Create the JWT string
-			tokenString, err := token.SignedString(config.SecretKey)
+			tokenString, err := token.SignedString([]byte(config.SecretKey))
 			if err != nil {
 				// If there is an error in creating the JWT return an internal server error
 				w.WriteHeader(http.StatusInternalServerError)
