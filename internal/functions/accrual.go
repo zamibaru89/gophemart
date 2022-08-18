@@ -4,6 +4,7 @@ import (
 	"github.com/go-resty/resty/v2"
 	"github.com/zamibaru89/gophermart/internal/config"
 	"github.com/zamibaru89/gophermart/internal/storage"
+	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -21,11 +22,13 @@ func AccrualUpdate(repo storage.Repo, conf config.ServerConfig) error {
 			R().
 			SetHeader("Content-Type", "application/json")
 		for _, order := range updateList {
+
 			orderNum := strconv.FormatInt(order.OrderID, 10)
 			resp, err := req.Get("/api/orders/" + orderNum)
 			if err != nil {
 				return err
 			}
+			log.Println(resp)
 			status := resp.StatusCode()
 			switch status {
 			case http.StatusTooManyRequests:
