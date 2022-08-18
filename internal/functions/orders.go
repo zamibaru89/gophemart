@@ -1,22 +1,24 @@
 package functions
 
-import (
-	"strconv"
-)
+func CheckOrderId(number int64) bool {
+	return (number%10+checksum(number/10))%10 == 0
+}
 
-func CheckOrderId(orderToCheck int64) (result bool) {
-	orderToCheckString := strconv.FormatInt(orderToCheck, 10)
-	sum := 0
-	for i := len(orderToCheckString) - 1; i >= 0; i-- {
-		digit, _ := strconv.Atoi(string(orderToCheckString[i]))
-		if i%2 == 0 {
-			digit *= 2
-			if digit > 9 {
-				digit -= 9
+func checksum(number int64) int64 {
+	var luhn int64
+
+	for i := 0; number > 0; i++ {
+		cur := number % 10
+
+		if i%2 == 0 { // even
+			cur = cur * 2
+			if cur > 9 {
+				cur = cur%10 + cur/10
 			}
 		}
-		sum += digit
+
+		luhn += cur
+		number = number / 10
 	}
-	result = sum%10 == 0
-	return result
+	return luhn % 10
 }
