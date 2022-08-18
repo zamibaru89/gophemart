@@ -291,6 +291,15 @@ func main() {
 		return
 
 	}
+	tickerUpdate := time.NewTicker(10 * time.Second)
+	go func() {
+		for range tickerUpdate.C {
+			err := functions.AccrualUpdate(Server, ServerConfig)
+			if err != nil {
+				log.Println(err)
+			}
+		}
+	}()
 	r := chi.NewRouter()
 
 	r.Route("/api/user", func(r chi.Router) {
@@ -304,4 +313,5 @@ func main() {
 		r.With(jwtauth.Verifier(tokenAuth), jwtauth.Authenticator).Post("/balance/withdrawals", PostWithdrawal(ServerConfig, Server))
 	})
 	http.ListenAndServe(ServerConfig.Address, r)
+
 }

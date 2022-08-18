@@ -112,10 +112,9 @@ func (p *PostgresStorage) PostOrder(order Order) error {
 					)
 					VALUES($1, $2, $3, $4, $5)
 ON CONFLICT (orderID) DO 
-		    UPDATE SET 	userID=$2,
-		            	state=$3,
+		    UPDATE SET 	state=$3,
 		            	accrual=$4,
-		            	uploaded_at=$5;`
+		            	;`
 	_, err := p.Connection.Exec(context.Background(), query, order.OrderID, order.UserID, order.State, order.Accrual, order.UploadedAt)
 	if err != nil {
 		log.Println(err)

@@ -6,12 +6,14 @@ import (
 )
 
 type ServerConfig struct {
-	Address string `env:"ADDRESS"`
-	DSN     string `env:"DATABASE_URI"`
+	Address        string `env:"ADDRESS"`
+	DSN            string `env:"DATABASE_URI"`
+	AccrualAddress string `env:"ACCRUAL_SYSTEM_ADDRESS"`
 }
 
 func LoadServerConfig() (conf ServerConfig, err error) {
-	flag.StringVar(&conf.Address, "a", ":8080", "")
+	flag.StringVar(&conf.Address, "a", ":80", "")
+	flag.StringVar(&conf.AccrualAddress, "r", ":8080", "")
 	flag.StringVar(&conf.DSN, "d", "", "")
 	flag.Parse()
 

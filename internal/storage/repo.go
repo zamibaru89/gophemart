@@ -12,6 +12,7 @@ type Repo interface {
 	GetBalanceByUserID(userid int64) (float64, error)
 	PostWithdrawal(withdrawal Withdrawal) error
 	SetBalanceByUserID(userid int64, current float64) error
+	GetOrdersForUpdate() ([]Order, error)
 }
 
 type Credentials struct {

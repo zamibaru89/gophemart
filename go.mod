@@ -8,6 +8,7 @@ require (
 	github.com/go-chi/chi/v5 v5.0.7
 	github.com/go-chi/jwtauth/v5 v5.0.2
 	github.com/go-chi/render v1.0.2
+	github.com/go-resty/resty/v2 v2.7.0
 	github.com/jackc/pgx/v4 v4.17.0
 	github.com/pkg/errors v0.9.1
 )
@@ -30,5 +31,6 @@ require (
 	github.com/lestrrat-go/jwx v1.2.6 // indirect
 	github.com/lestrrat-go/option v1.0.0 // indirect
 	golang.org/x/crypto v0.0.0-20220722155217-630584e8d5aa // indirect
+	golang.org/x/net v0.0.0-20211112202133-69e39bad7dc2 // indirect
 	golang.org/x/text v0.3.7 // indirect
 )
