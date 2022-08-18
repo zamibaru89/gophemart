@@ -10,7 +10,9 @@ type Repo interface {
 	GetOrderByOrderID(orderid int64) (Order, error)
 	GetOrdersByUserID(userid int64) ([]Order, error)
 	GetBalanceByUserID(userid int64) (float64, error)
+	GetWithdrawalHistoryForUser(userid int64) (float64, error)
 	PostWithdrawal(withdrawal Withdrawal) error
+	GetWithdrawals(userid int64) ([]Withdrawal, error)
 	SetBalanceByUserID(userid int64, current float64) error
 	GetOrdersForUpdate() ([]Order, error)
 }
@@ -30,9 +32,9 @@ type Order struct {
 }
 
 type Balance struct {
-	UserID  int     `json:"-"`
-	Current float64 `json:"current"`
-	//Withdrawn float32 `json:"withdrawn"`
+	UserID    int     `json:"-"`
+	Current   float64 `json:"current"`
+	Withdrawn float64 `json:"withdrawn"`
 }
 type Withdrawal struct {
 	UserID      int       `json:"-"`

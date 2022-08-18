@@ -159,7 +159,14 @@ func GetBalance(config config.ServerConfig, st storage.Repo) func(w http.Respons
 			return
 		}
 		balance.Current = current
+		withdrawn, err := st.GetWithdrawalHistoryForUser(int64(balance.UserID))
 
+		if err != nil {
+
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+		balance.Withdrawn = withdrawn
 		render.JSON(w, r, balance)
 
 	}
@@ -217,7 +224,7 @@ func GetWithdrawals(config config.ServerConfig, st storage.Repo) func(w http.Res
 
 		withdrawal.UserID = int(ID.(float64))
 
-		listWithdrawals, err := st.GetOrdersByUserID(int64(withdrawal.UserID))
+		listWithdrawals, err := st.GetWithdrawals(int64(withdrawal.UserID))
 
 		if err != nil {
 

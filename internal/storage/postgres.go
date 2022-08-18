@@ -227,6 +227,31 @@ func (p *PostgresStorage) GetBalanceByUserID(userid int64) (float64, error) {
 	return current, nil
 }
 
+func (p *PostgresStorage) GetWithdrawalHistoryForUser(userid int64) (float64, error) {
+
+	query := `
+		SELECT sum(sum)  FROM withdrawals
+		WHERE userID=$1;
+	`
+	result, err := p.Connection.Query(context.Background(), query, userid)
+	if err != nil {
+		return 0, err
+	}
+	defer result.Close()
+	var withdrawn float64
+	for result.Next() {
+
+		err = result.Scan(&withdrawn)
+
+	}
+	if err != nil {
+		log.Println(err)
+		return 0, err
+	}
+
+	return withdrawn, nil
+}
+
 func (p *PostgresStorage) SetBalanceByUserID(userid int64, current float64) error {
 
 	query := `INSERT INTO balance(
