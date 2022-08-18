@@ -33,7 +33,7 @@ func AccrualUpdate(repo storage.Repo, conf config.ServerConfig) error {
 			status := resp.StatusCode()
 			switch status {
 			case http.StatusTooManyRequests:
-				time.Sleep(60 * time.Second)
+				time.Sleep(10 * time.Second)
 				return nil
 
 			case http.StatusOK:
