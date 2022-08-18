@@ -299,7 +299,7 @@ func main() {
 		return
 
 	}
-	tickerUpdate := time.NewTicker(10 * time.Second)
+	tickerUpdate := time.NewTicker(1 * time.Second)
 	go func() {
 		for range tickerUpdate.C {
 			log.Println("start AccrualUpdate")
