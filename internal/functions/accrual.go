@@ -7,7 +7,6 @@ import (
 	"github.com/zamibaru89/gophermart/internal/storage"
 	"log"
 	"net/http"
-	"strconv"
 	"time"
 )
 
@@ -24,7 +23,7 @@ func AccrualUpdate(repo storage.Repo, conf config.ServerConfig) error {
 			SetHeader("Content-Type", "application/json")
 		for _, order := range updateList {
 
-			orderNum := strconv.FormatInt(order.OrderID, 10)
+			orderNum := order.OrderID
 			resp, err := req.Get("/api/orders/" + orderNum)
 			if err != nil {
 				return err
@@ -43,10 +42,8 @@ func AccrualUpdate(repo storage.Repo, conf config.ServerConfig) error {
 					return err
 				}
 				order.State = toUpdateOrder.State
-				order.OrderID, err = strconv.ParseInt(toUpdateOrder.OrderID, 10, 64)
-				if err != nil {
-					return err
-				}
+				order.OrderID = toUpdateOrder.OrderID
+
 				order.Accrual = toUpdateOrder.Accrual
 
 				err = repo.PostOrder(order)

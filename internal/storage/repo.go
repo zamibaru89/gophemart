@@ -22,7 +22,7 @@ type Credentials struct {
 }
 
 type Order struct {
-	OrderID    int64     `json:"order"`
+	OrderID    string    `json:"order"`
 	UserID     int       `json:"userID,omitempty"`
 	State      string    `json:"state,omitempty"`
 	Accrual    float64   `json:"accrual,omitempty"`
@@ -36,7 +36,7 @@ type Balance struct {
 }
 type Withdrawal struct {
 	UserID      int       `json:"-"`
-	OrderID     int64     `json:"order"`
+	OrderID     string    `json:"order"`
 	Sum         float64   `json:"sum"`
 	ProcessedAt time.Time `json:"processed_at,omitempty"`
 }

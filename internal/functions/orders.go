@@ -1,7 +1,13 @@
 package functions
 
-func CheckOrderId(number int64) bool {
-	return (number%10+checksum(number/10))%10 == 0
+import "strconv"
+
+func CheckOrderId(string string) (bool, error) {
+	number, err := strconv.ParseInt(string, 10, 64)
+	if err != nil {
+		return false, err
+	}
+	return (number%10+checksum(number/10))%10 == 0, nil
 }
 
 func checksum(number int64) int64 {

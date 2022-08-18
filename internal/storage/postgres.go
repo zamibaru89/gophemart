@@ -24,7 +24,7 @@ func NewPostgresStorage(c config.ServerConfig) (Repo, *pgx.Conn, error) {
     password VARCHAR(50)
 );
 CREATE TABLE IF NOT EXISTS orders (
-				  orderID           bigint UNIQUE PRIMARY KEY NOT NULL,
+				  orderID           VARCHAR(64) UNIQUE,
 				  userID           INT NOT NULL,
 				  state 	  TEXT NOT NULL,
 				  accrual	double precision ,
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS balance (
 
 CREATE TABLE IF NOT EXISTS withdrawals  (
 				userID				INT NOT NULL,
-  				orderID				BIGINT UNIQUE PRIMARY KEY NOT NULL,
+  				orderID				VARCHAR(64) UNIQUE,
 				sum					FLOAT,
     			processed_at		TIMESTAMP);
 
@@ -127,7 +127,7 @@ ON CONFLICT (orderID) DO
 
 func (p *PostgresStorage) GetOrderByOrderID(orderid int64) (Order, error) {
 	var order Order
-	order.OrderID = orderid
+	order.OrderID = string(orderid)
 	query := `
 		SELECT orderID, userID, state, accrual, uploaded_at FROM orders  WHERE orderid=$1;
 	`
@@ -162,6 +162,7 @@ func (p *PostgresStorage) GetOrdersByUserID(userid int64) ([]Order, error) {
 	defer result.Close()
 	for result.Next() {
 		var order Order
+
 		err = result.Scan(&order.OrderID, &order.UserID, &order.State, &order.Accrual, &order.UploadedAt)
 
 		orders = append(orders, order)

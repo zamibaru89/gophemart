@@ -82,13 +82,14 @@ func PostOrder(config config.ServerConfig, st storage.Repo) func(w http.Response
 
 			w.WriteHeader(http.StatusBadRequest)
 		}
-		orderId, err := strconv.Atoi(string(body))
-		order.OrderID = int64(orderId)
+
+		order.OrderID = string(body)
 		ID := claims["ID"]
 
 		order.UserID = int(ID.(float64))
 
-		checkOrder, err := st.GetOrderByOrderID(order.OrderID)
+		orderIdCOnv, err := strconv.ParseInt(order.OrderID, 10, 64)
+		checkOrder, err := st.GetOrderByOrderID(orderIdCOnv)
 
 		if checkOrder.UserID != 0 {
 			if checkOrder.UserID == order.UserID {
@@ -100,12 +101,16 @@ func PostOrder(config config.ServerConfig, st storage.Repo) func(w http.Response
 			}
 
 		}
-		if !functions.CheckOrderId(order.OrderID) {
+		luhn, err := functions.CheckOrderId(order.OrderID)
+		if err != nil {
+			return
+		}
+		if !luhn {
 			w.WriteHeader(http.StatusUnprocessableEntity)
 			return
 		}
 
-		order.State = "New"
+		order.State = "NEW"
 		order.UploadedAt = time.Now()
 		err = st.PostOrder(order)
 		if err != nil {
@@ -168,8 +173,7 @@ func PostWithdrawal(config config.ServerConfig, st storage.Repo) func(w http.Res
 		if err != nil {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusBadRequest)
-			//render.JSON(w, r, user)
-			fmt.Println(err)
+
 			return
 
 		}
@@ -178,7 +182,11 @@ func PostWithdrawal(config config.ServerConfig, st storage.Repo) func(w http.Res
 
 		withdrawal.UserID = int(ID.(float64))
 
-		if !functions.CheckOrderId(withdrawal.OrderID) {
+		luhn, err := functions.CheckOrderId(withdrawal.OrderID)
+		if err != nil {
+			return
+		}
+		if !luhn {
 			w.WriteHeader(http.StatusUnprocessableEntity)
 			return
 		}
