@@ -294,12 +294,12 @@ func main() {
 	r.Route("/api/user", func(r chi.Router) {
 		r.Post("/register", SignUp(ServerConfig, Server))
 		r.Post("/login", SignIn(ServerConfig, Server))
-		r.With(jwtauth.Verifier(tokenAuth)).Post("/welcome", Welcome)
-		r.With(jwtauth.Verifier(tokenAuth)).Post("/orders", PostOrder(ServerConfig, Server))
-		r.With(jwtauth.Verifier(tokenAuth)).Get("/orders", GetOrders(ServerConfig, Server))
-		r.With(jwtauth.Verifier(tokenAuth)).Get("/balance", GetBalance(ServerConfig, Server))
-		r.With(jwtauth.Verifier(tokenAuth)).Post("/balance/withdraw", PostWithdrawal(ServerConfig, Server))
-		r.With(jwtauth.Verifier(tokenAuth)).Post("/balance/withdrawals", PostWithdrawal(ServerConfig, Server))
+		r.With(jwtauth.Verifier(tokenAuth), jwtauth.Authenticator).Post("/welcome", Welcome)
+		r.With(jwtauth.Verifier(tokenAuth), jwtauth.Authenticator).Post("/orders", PostOrder(ServerConfig, Server))
+		r.With(jwtauth.Verifier(tokenAuth), jwtauth.Authenticator).Get("/orders", GetOrders(ServerConfig, Server))
+		r.With(jwtauth.Verifier(tokenAuth), jwtauth.Authenticator).Get("/balance", GetBalance(ServerConfig, Server))
+		r.With(jwtauth.Verifier(tokenAuth), jwtauth.Authenticator).Post("/balance/withdraw", PostWithdrawal(ServerConfig, Server))
+		r.With(jwtauth.Verifier(tokenAuth), jwtauth.Authenticator).Post("/balance/withdrawals", PostWithdrawal(ServerConfig, Server))
 	})
 	http.ListenAndServe(ServerConfig.Address, r)
 }

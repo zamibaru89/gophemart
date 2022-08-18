@@ -110,7 +110,12 @@ func (p *PostgresStorage) PostOrder(order Order) error {
 	query := `INSERT INTO orders(
 					orderID, userID, state, accrual, uploaded_at
 					)
-					VALUES($1, $2, $3, $4, $5);`
+					VALUES($1, $2, $3, $4, $5)
+ON CONFLICT (orderID) DO 
+		    UPDATE SET 	userID=$2,
+		            	state=$3,
+		            	accrual=$4,
+		            	uploaded_at=$4;`
 	_, err := p.Connection.Exec(context.Background(), query, order.OrderID, order.UserID, order.State, order.Accrual, order.UploadedAt)
 	if err != nil {
 		log.Println(err)
@@ -151,6 +156,33 @@ func (p *PostgresStorage) GetOrdersByUserID(userid int64) ([]Order, error) {
 		WHERE userID=$1;
 	`
 	result, err := p.Connection.Query(context.Background(), query, userid)
+	if err != nil {
+		return orders, err
+	}
+	defer result.Close()
+	for result.Next() {
+		var order Order
+		err = result.Scan(&order.OrderID, &order.UserID, &order.State, &order.Accrual, &order.UploadedAt)
+
+		orders = append(orders, order)
+	}
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	return orders, nil
+}
+
+func (p *PostgresStorage) GetOrdersForUpdate() ([]Order, error) {
+	var orders []Order
+
+	query := `
+		SELECT orderID, userID, state, accrual, uploaded_at FROM orders 
+		WHERE state in ('NEW',
+		                'PROCESSING');
+	`
+	result, err := p.Connection.Query(context.Background(), query)
 	if err != nil {
 		return orders, err
 	}
