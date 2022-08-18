@@ -1,6 +1,7 @@
 package functions
 
 import (
+	"encoding/json"
 	"github.com/go-resty/resty/v2"
 	"github.com/zamibaru89/gophermart/internal/config"
 	"github.com/zamibaru89/gophermart/internal/storage"
@@ -36,10 +37,18 @@ func AccrualUpdate(repo storage.Repo, conf config.ServerConfig) error {
 				return nil
 
 			case http.StatusOK:
-				var toUpdateOrder storage.Order
-				toUpdateOrder.State = order.State
-				toUpdateOrder.Accrual = order.Accrual
-				toUpdateOrder.OrderID = order.OrderID
+				var toUpdateOrder storage.Accrual
+				err = json.Unmarshal(resp.Body(), &toUpdateOrder)
+				if err != nil {
+					return err
+				}
+				order.State = toUpdateOrder.State
+				order.OrderID, err = strconv.ParseInt(toUpdateOrder.OrderID, 10, 64)
+				if err != nil {
+					return err
+				}
+				order.Accrual = toUpdateOrder.Accrual
+
 				err = repo.PostOrder(order)
 				if err != nil {
 					return err
