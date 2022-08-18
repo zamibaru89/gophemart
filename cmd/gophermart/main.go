@@ -319,7 +319,7 @@ func main() {
 		r.With(jwtauth.Verifier(tokenAuth), jwtauth.Authenticator).Get("/orders", GetOrders(ServerConfig, Server))
 		r.With(jwtauth.Verifier(tokenAuth), jwtauth.Authenticator).Get("/balance", GetBalance(ServerConfig, Server))
 		r.With(jwtauth.Verifier(tokenAuth), jwtauth.Authenticator).Post("/balance/withdraw", PostWithdrawal(ServerConfig, Server))
-		r.With(jwtauth.Verifier(tokenAuth), jwtauth.Authenticator).Get("/balance/withdrawals", GetWithdrawals(ServerConfig, Server))
+		r.With(jwtauth.Verifier(tokenAuth), jwtauth.Authenticator).Get("/withdrawals", GetWithdrawals(ServerConfig, Server))
 	})
 	http.ListenAndServe(ServerConfig.Address, r)
 
