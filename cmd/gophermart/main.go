@@ -111,6 +111,7 @@ func PostOrder(config config.ServerConfig, st storage.Repo) func(w http.Response
 		if err != nil {
 			return
 		}
+		w.WriteHeader(http.StatusAccepted)
 	}
 }
 
