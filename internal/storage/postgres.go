@@ -125,13 +125,13 @@ ON CONFLICT (orderID) DO
 	return nil
 }
 
-func (p *PostgresStorage) GetOrderByOrderID(orderid int64) (Order, error) {
+func (p *PostgresStorage) GetOrderByOrderID(id int64) (Order, error) {
 	var order Order
-	order.OrderID = string(orderid)
+	order.OrderID = string(id)
 	query := `
-		SELECT orderID, userID, state, accrual, uploaded_at FROM orders  WHERE orderid=$1;
+		SELECT orderID, userID, state, accrual, uploaded_at FROM orders  WHERE orderID=$1;
 	`
-	result, err := p.Connection.Query(context.Background(), query, order.OrderID)
+	result, err := p.Connection.Query(context.Background(), query, id)
 
 	if err != nil {
 		return order, err
