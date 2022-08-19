@@ -147,7 +147,7 @@ func GetBalance(config config.ServerConfig, st storage.Repo) func(w http.Respons
 		ID := claims["ID"]
 
 		balance.UserID = int(ID.(float64))
-
+		log.Println(ID)
 		current, err := st.GetBalanceByUserID(int64(balance.UserID))
 
 		if err != nil {

@@ -22,7 +22,7 @@ func main() {
 		log.Fatal(err)
 		return
 	}
-	tokenAuth = jwtauth.New("HS256", ServerConfig.SecretKey, nil)
+	tokenAuth = jwtauth.New("HS256", []byte(ServerConfig.SecretKey), nil)
 	Server, Conn, err := storage.NewPostgresStorage(ServerConfig)
 	fmt.Println(Server, Conn)
 	if err != nil {
