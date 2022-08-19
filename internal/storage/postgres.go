@@ -110,7 +110,7 @@ func (p *PostgresStorage) PostOrder(order Order) error {
 	query := `INSERT INTO orders(
 					orderID, userID, state, accrual, uploaded_at
 					)
-					VALUES($1, $2, $3, $4, $5)
+					VALUES($1, $2, $3, 0, $5)
 ON CONFLICT (orderID) DO 
 		    UPDATE SET 	state=$3,
 		            	accrual=$4
