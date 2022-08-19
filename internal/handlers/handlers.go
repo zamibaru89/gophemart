@@ -37,15 +37,15 @@ func SignUp(config config.ServerConfig, st storage.Repo) func(w http.ResponseWri
 		if err != nil {
 			log.Println(err)
 		}
-		id, err := st.SelectUser(user)
+		login, err := st.SignIn(user)
 		if err != nil {
 			log.Println(err)
 		}
 		expirationTime := time.Now().Add(5 * time.Minute)
 
 		claims := &Claims{
-			Username: user.Username,
-			ID:       id.ID,
+			Username: login.Username,
+			ID:       login.ID,
 			StandardClaims: jwt.StandardClaims{
 				// In JWT, the expiry time is expressed as unix milliseconds
 				ExpiresAt: expirationTime.Unix(),
