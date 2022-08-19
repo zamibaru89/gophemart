@@ -42,14 +42,19 @@ func main() {
 	}()
 	r := chi.NewRouter()
 	r.Route("/api/user", func(r chi.Router) {
-		r.Post("/register", handlers.SignUp(ServerConfig, Server))
-		r.Post("/login", handlers.SignIn(ServerConfig, Server))
-		r.With(jwtauth.Verifier(tokenAuth), jwtauth.Authenticator).Post("/welcome", handlers.Welcome)
-		r.With(jwtauth.Verifier(tokenAuth), jwtauth.Authenticator).Post("/orders", handlers.PostOrder(ServerConfig, Server))
-		r.With(jwtauth.Verifier(tokenAuth), jwtauth.Authenticator).Get("/orders", handlers.GetOrders(ServerConfig, Server))
-		r.With(jwtauth.Verifier(tokenAuth), jwtauth.Authenticator).Get("/balance", handlers.GetBalance(ServerConfig, Server))
-		r.With(jwtauth.Verifier(tokenAuth), jwtauth.Authenticator).Post("/balance/withdraw", handlers.PostWithdrawal(ServerConfig, Server))
-		r.With(jwtauth.Verifier(tokenAuth), jwtauth.Authenticator).Get("/withdrawals", handlers.GetWithdrawals(ServerConfig, Server))
+		r.Group(func(r chi.Router) {
+			r.Use(jwtauth.Verifier(tokenAuth))
+			r.Use(jwtauth.Authenticator)
+			r.Post("/orders", handlers.PostOrder(ServerConfig, Server))
+			r.Get("/orders", handlers.GetOrders(ServerConfig, Server))
+			r.Get("/balance", handlers.GetBalance(ServerConfig, Server))
+			r.Post("/balance/withdraw", handlers.PostWithdrawal(ServerConfig, Server))
+			r.Get("/withdrawals", handlers.GetWithdrawals(ServerConfig, Server))
+		})
+		r.Group(func(r chi.Router) {
+			r.Post("/register", handlers.SignUp(ServerConfig, Server))
+			r.Post("/login", handlers.SignIn(ServerConfig, Server))
+		})
 	})
 	http.ListenAndServe(ServerConfig.Address, r)
 
