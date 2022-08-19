@@ -289,7 +289,7 @@ func (p *PostgresStorage) GetWithdrawals(userid int64) ([]Withdrawal, error) {
 
 	query := `
 		SELECT orderID, userID, sum, processed_at FROM withdrawals 
-		WHERE userID=$1 ORDER BY uploaded_at ASC;
+		WHERE userID=$1 ORDER BY processed_at ASC;
 	`
 	result, err := p.Connection.Query(context.Background(), query, userid)
 	if err != nil {
