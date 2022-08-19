@@ -12,7 +12,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"strconv"
 	"time"
 )
 
@@ -84,8 +83,7 @@ func PostOrder(config config.ServerConfig, st storage.Repo) func(w http.Response
 
 		order.UserID = int(ID.(float64))
 
-		orderIdCOnv, err := strconv.ParseInt(order.OrderID, 10, 64)
-		checkOrder, err := st.GetOrderByOrderID(orderIdCOnv)
+		checkOrder, err := st.GetOrderByOrderID(order.OrderID)
 
 		if checkOrder.UserID != 0 {
 			if checkOrder.UserID == order.UserID {

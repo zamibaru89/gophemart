@@ -7,7 +7,7 @@ type Repo interface {
 	SelectUser(user Credentials) (Credentials, error)
 	SignIn(user Credentials) (Credentials, error)
 	PostOrder(order Order) error
-	GetOrderByOrderID(orderid int64) (Order, error)
+	GetOrderByOrderID(orderid string) (Order, error)
 	GetOrdersByUserID(userid int64) ([]Order, error)
 	GetBalanceByUserID(userid int64) (float64, error)
 	GetWithdrawalHistoryForUser(userid int64) (float64, error)

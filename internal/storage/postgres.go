@@ -125,9 +125,9 @@ ON CONFLICT (orderID) DO
 	return nil
 }
 
-func (p *PostgresStorage) GetOrderByOrderID(id int64) (Order, error) {
+func (p *PostgresStorage) GetOrderByOrderID(id string) (Order, error) {
 	var order Order
-	order.OrderID = string(id)
+	order.OrderID = id
 	query := `
 		SELECT orderID, userID, state, accrual, uploaded_at FROM orders  WHERE orderID=$1;
 	`
