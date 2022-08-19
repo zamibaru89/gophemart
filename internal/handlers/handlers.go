@@ -85,7 +85,7 @@ func PostOrder(config config.ServerConfig, st storage.Repo) func(w http.Response
 
 		checkOrder, err := st.GetOrderByOrderID(order.OrderID)
 		if err != nil {
-			return err
+			return
 		}
 		luhn, err := functions.CheckOrderID(order.OrderID)
 		if err != nil {

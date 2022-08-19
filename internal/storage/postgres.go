@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS balance (
 CREATE TABLE IF NOT EXISTS withdrawals  (
 				userID				INT NOT NULL,
   				orderID				VARCHAR(64) UNIQUE,
-				sum					FLOAT,
+				sum					double precision,
     			processed_at		TIMESTAMP);
 
 `
