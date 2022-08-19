@@ -221,15 +221,15 @@ func GetWithdrawals(config config.ServerConfig, st storage.Repo) func(w http.Res
 		withdrawal.UserID = int(ID.(float64))
 
 		listWithdrawals, err := st.GetWithdrawals(int64(withdrawal.UserID))
-
-		if err != nil {
-
-			w.WriteHeader(http.StatusInternalServerError)
-			return
-		}
 		if len(listWithdrawals) == 0 {
 			w.WriteHeader(http.StatusNoContent)
 		}
+		if err != nil {
+
+			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Println(err)
+		}
+
 		render.JSON(w, r, listWithdrawals)
 
 	}
