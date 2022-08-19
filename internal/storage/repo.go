@@ -24,9 +24,9 @@ type Credentials struct {
 }
 
 type Order struct {
-	OrderID    string    `json:"order"`
+	OrderID    string    `json:"number"`
 	UserID     int       `json:"userID,omitempty"`
-	State      string    `json:"state,omitempty"`
+	State      string    `json:"status,omitempty"`
 	Accrual    float64   `json:"accrual,omitempty"`
 	UploadedAt time.Time `json:"uploaded_at,omitempty"`
 }
