@@ -74,7 +74,7 @@ func PostOrder(config config.ServerConfig, st storage.Repo) func(w http.Response
 		var order storage.Order
 		body, err := ioutil.ReadAll(r.Body)
 		if err != nil {
-
+			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusBadRequest)
 		}
 
@@ -92,16 +92,17 @@ func PostOrder(config config.ServerConfig, st storage.Repo) func(w http.Response
 			log.Println(err)
 		}
 		if !luhn {
+			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusUnprocessableEntity)
 			return
 		}
 		if checkOrder.UserID != 0 {
 			if checkOrder.UserID == order.UserID {
-
+				w.Header().Set("Content-Type", "application/json")
 				w.WriteHeader(http.StatusOK)
 				return
 			} else {
-
+				w.Header().Set("Content-Type", "application/json")
 				w.WriteHeader(http.StatusConflict)
 				return
 			}
@@ -114,7 +115,7 @@ func PostOrder(config config.ServerConfig, st storage.Repo) func(w http.Response
 			if err != nil {
 				return
 			}
-
+			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusAccepted)
 		}
 	}

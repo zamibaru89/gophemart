@@ -180,8 +180,7 @@ func (p *PostgresStorage) GetOrdersForUpdate() ([]Order, error) {
 
 	query := `
 		SELECT orderID, userID, state, accrual, uploaded_at FROM orders 
-		WHERE state in ('NEW',
-		                'PROCESSING');
+		WHERE state in ('NEW', 'REGISTERED', 'PROCESSING');
 	`
 	result, err := p.Connection.Query(context.Background(), query)
 	if err != nil {
