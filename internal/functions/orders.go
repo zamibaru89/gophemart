@@ -2,7 +2,7 @@ package functions
 
 import "strconv"
 
-func CheckOrderId(string string) (bool, error) {
+func CheckOrderID(string string) (bool, error) {
 	number, err := strconv.ParseInt(string, 10, 64)
 	if err != nil {
 		return false, err

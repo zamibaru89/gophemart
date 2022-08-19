@@ -46,6 +46,9 @@ func AccrualUpdate(repo storage.Repo, conf config.ServerConfig) error {
 				order.Accrual = toUpdateOrder.Accrual
 
 				err = repo.PostOrder(order)
+				if err != nil {
+					return err
+				}
 				oldBalance, err := repo.GetBalanceByUserID(int64(order.UserID))
 				if err != nil {
 					return err

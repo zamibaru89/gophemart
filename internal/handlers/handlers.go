@@ -84,10 +84,12 @@ func PostOrder(config config.ServerConfig, st storage.Repo) func(w http.Response
 		order.UserID = int(ID.(float64))
 
 		checkOrder, err := st.GetOrderByOrderID(order.OrderID)
-
-		luhn, err := functions.CheckOrderId(order.OrderID)
 		if err != nil {
-			return
+			return err
+		}
+		luhn, err := functions.CheckOrderID(order.OrderID)
+		if err != nil {
+			log.Println(err)
 		}
 		if !luhn {
 			w.WriteHeader(http.StatusUnprocessableEntity)
@@ -186,7 +188,7 @@ func PostWithdrawal(config config.ServerConfig, st storage.Repo) func(w http.Res
 
 		withdrawal.UserID = int(ID.(float64))
 
-		luhn, err := functions.CheckOrderId(withdrawal.OrderID)
+		luhn, err := functions.CheckOrderID(withdrawal.OrderID)
 		if err != nil {
 			return
 		}
@@ -195,6 +197,9 @@ func PostWithdrawal(config config.ServerConfig, st storage.Repo) func(w http.Res
 			return
 		}
 		currentBalance, err := st.GetBalanceByUserID(int64(withdrawal.UserID))
+		if err != nil {
+			return
+		}
 		balanceAfter := currentBalance - withdrawal.Sum
 		if balanceAfter >= 0 {
 			withdrawal.ProcessedAt = time.Now()
