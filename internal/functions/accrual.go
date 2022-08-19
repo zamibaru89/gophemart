@@ -5,7 +5,6 @@ import (
 	"github.com/go-resty/resty/v2"
 	"github.com/zamibaru89/gophermart/internal/config"
 	"github.com/zamibaru89/gophermart/internal/storage"
-	"log"
 	"net/http"
 	"time"
 )
@@ -28,7 +27,7 @@ func AccrualUpdate(repo storage.Repo, conf config.ServerConfig) error {
 			if err != nil {
 				return err
 			}
-			log.Println(resp)
+
 			status := resp.StatusCode()
 			switch status {
 			case http.StatusTooManyRequests:

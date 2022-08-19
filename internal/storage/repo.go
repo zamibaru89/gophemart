@@ -44,6 +44,6 @@ type Withdrawal struct {
 }
 type Accrual struct {
 	OrderID string  `json:"order"`
-	State   string  `json:"Status,omitempty"`
+	State   string  `json:"status,omitempty"`
 	Accrual float64 `json:"accrual,omitempty"`
 }
