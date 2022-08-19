@@ -37,11 +37,15 @@ func SignUp(config config.ServerConfig, st storage.Repo) func(w http.ResponseWri
 		if err != nil {
 			log.Println(err)
 		}
+		id, err := st.SelectUser(user)
+		if err != nil {
+			log.Println(err)
+		}
 		expirationTime := time.Now().Add(5 * time.Minute)
 
 		claims := &Claims{
 			Username: user.Username,
-			ID:       user.ID,
+			ID:       id.ID,
 			StandardClaims: jwt.StandardClaims{
 				// In JWT, the expiry time is expressed as unix milliseconds
 				ExpiresAt: expirationTime.Unix(),
@@ -80,9 +84,9 @@ func PostOrder(config config.ServerConfig, st storage.Repo) func(w http.Response
 
 		order.OrderID = string(body)
 		ID := claims["ID"]
-
+		log.Println(ID)
 		order.UserID = int(ID.(float64))
-
+		log.Println(order.UserID)
 		checkOrder, err := st.GetOrderByOrderID(order.OrderID)
 		if err != nil {
 			return
@@ -98,13 +102,13 @@ func PostOrder(config config.ServerConfig, st storage.Repo) func(w http.Response
 		}
 		if checkOrder.UserID != 0 {
 			if checkOrder.UserID == order.UserID {
-				log.Println("the same order for same user")
+
 				w.Header().Set("Content-Type", "application/json")
 				w.WriteHeader(http.StatusOK)
 				return
 			} else {
 				w.Header().Set("Content-Type", "application/json")
-				log.Println("the same order for different user")
+
 				w.WriteHeader(http.StatusConflict)
 				return
 			}
