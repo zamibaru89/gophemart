@@ -152,20 +152,18 @@ func GetBalance(config config.ServerConfig, st storage.Repo) func(w http.Respons
 
 		if err != nil {
 
-			w.WriteHeader(http.StatusInternalServerError)
-			return
+			balance.Current = 0
 		}
+
 		balance.Current = current
 		withdrawn, err := st.GetWithdrawalHistoryForUser(int64(balance.UserID))
 
 		if err != nil {
+			balance.Withdrawn = 0
 
-			w.WriteHeader(http.StatusInternalServerError)
-			return
 		}
 		balance.Withdrawn = withdrawn
 		render.JSON(w, r, balance)
-		return
 
 	}
 }
