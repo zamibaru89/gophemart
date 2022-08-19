@@ -33,7 +33,7 @@ func main() {
 	tickerUpdate := time.NewTicker(10 * time.Second)
 	go func() {
 		for range tickerUpdate.C {
-			log.Println("start AccrualUpdate")
+			//log.Println("start AccrualUpdate")
 			err := functions.AccrualUpdate(Server, ServerConfig)
 			if err != nil {
 				log.Println(err)
