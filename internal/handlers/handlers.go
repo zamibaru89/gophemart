@@ -98,11 +98,13 @@ func PostOrder(config config.ServerConfig, st storage.Repo) func(w http.Response
 		}
 		if checkOrder.UserID != 0 {
 			if checkOrder.UserID == order.UserID {
+				log.Println("the same order for same user")
 				w.Header().Set("Content-Type", "application/json")
 				w.WriteHeader(http.StatusOK)
 				return
 			} else {
 				w.Header().Set("Content-Type", "application/json")
+				log.Println("the same order for different user")
 				w.WriteHeader(http.StatusConflict)
 				return
 			}
@@ -115,6 +117,7 @@ func PostOrder(config config.ServerConfig, st storage.Repo) func(w http.Response
 			if err != nil {
 				return
 			}
+			log.Println("order was created")
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusAccepted)
 		}
