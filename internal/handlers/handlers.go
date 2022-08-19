@@ -165,6 +165,7 @@ func GetBalance(config config.ServerConfig, st storage.Repo) func(w http.Respons
 		}
 		balance.Withdrawn = withdrawn
 		render.JSON(w, r, balance)
+		return
 
 	}
 }
