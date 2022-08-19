@@ -85,16 +85,6 @@ func PostOrder(config config.ServerConfig, st storage.Repo) func(w http.Response
 
 		checkOrder, err := st.GetOrderByOrderID(order.OrderID)
 
-		if checkOrder.UserID != 0 {
-			if checkOrder.UserID == order.UserID {
-				w.WriteHeader(http.StatusOK)
-				return
-			} else {
-				w.WriteHeader(http.StatusConflict)
-				return
-			}
-
-		}
 		luhn, err := functions.CheckOrderId(order.OrderID)
 		if err != nil {
 			return
@@ -103,15 +93,28 @@ func PostOrder(config config.ServerConfig, st storage.Repo) func(w http.Response
 			w.WriteHeader(http.StatusUnprocessableEntity)
 			return
 		}
+		if checkOrder.UserID != 0 {
+			if checkOrder.UserID == order.UserID {
 
-		order.State = "NEW"
-		order.UploadedAt = time.Now()
-		err = st.PostOrder(order)
-		if err != nil {
-			return
+				w.WriteHeader(http.StatusOK)
+				return
+			} else {
+
+				w.WriteHeader(http.StatusConflict)
+				return
+			}
+
+		} else {
+
+			order.State = "NEW"
+			order.UploadedAt = time.Now()
+			err = st.PostOrder(order)
+			if err != nil {
+				return
+			}
+
+			w.WriteHeader(http.StatusAccepted)
 		}
-
-		w.WriteHeader(http.StatusAccepted)
 	}
 }
 
